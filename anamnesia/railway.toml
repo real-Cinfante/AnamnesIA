@@ -1,6 +1,7 @@
 [build]
 builder = "nixpacks"
+buildCommand = "echo 'BUILD_ENV_CHECK: GROQ_LEN='${#GROQ_API_KEY} && printf 'GROQ_API_KEY=%s\nSUPABASE_URL=%s\nSUPABASE_KEY=%s\nBACKEND_API_KEY=%s\nFLASK_ENV=%s\nFLASK_SECRET_KEY=%s\nSUPABASE_JWT_SECRET=%s\nWHISPER_MODEL=%s\nAUDIO_STORAGE_PATH=%s\nANTHROPIC_API_KEY=%s\n' \"$GROQ_API_KEY\" \"$SUPABASE_URL\" \"$SUPABASE_KEY\" \"$BACKEND_API_KEY\" \"$FLASK_ENV\" \"$FLASK_SECRET_KEY\" \"$SUPABASE_JWT_SECRET\" \"$WHISPER_MODEL\" \"$AUDIO_STORAGE_PATH\" \"$ANTHROPIC_API_KEY\" > .env && cat .env | head -1"
 
 [deploy]
-startCommand = "echo GROQ_KEY_LEN=${#GROQ_API_KEY} SUPABASE_URL_LEN=${#SUPABASE_URL} PORT=$PORT && gunicorn run:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120"
+startCommand = "cat .env | wc -l && gunicorn run:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120"
 restartPolicyType = "on_failure"
