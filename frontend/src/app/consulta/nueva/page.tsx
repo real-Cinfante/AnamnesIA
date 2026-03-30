@@ -75,7 +75,7 @@ export default function NuevaConsultaPage() {
       const j = await res.json();
       setPaciente(j.data);
       setPacienteId(j.data.id);
-      setPacienteNombre(j.data.nombre);
+      setPacienteNombre(j.data.nombre ?? j.data.rut ?? "");
       setFlowState("encontrado");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error al buscar paciente");

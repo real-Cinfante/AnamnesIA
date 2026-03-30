@@ -36,9 +36,9 @@ async function proxy(req: NextRequest, method: string): Promise<NextResponse> {
     if (forwarded) headers["Authorization"] = forwarded;
   }
 
-  // Forward Content-Type only for non-FormData requests
+  // Forward Content-Type for all requests (including multipart with boundary)
   const contentType = req.headers.get("content-type");
-  if (contentType && !contentType.includes("multipart/form-data")) {
+  if (contentType) {
     headers["Content-Type"] = contentType;
   }
 
