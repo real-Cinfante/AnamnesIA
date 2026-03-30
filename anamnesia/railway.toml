@@ -2,5 +2,5 @@
 builder = "nixpacks"
 
 [deploy]
-startCommand = "gunicorn run:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120"
+startCommand = "echo GROQ_KEY_LEN=${#GROQ_API_KEY} SUPABASE_URL_LEN=${#SUPABASE_URL} PORT=$PORT && gunicorn run:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120"
 restartPolicyType = "on_failure"
