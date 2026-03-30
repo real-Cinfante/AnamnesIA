@@ -510,7 +510,7 @@ export default function NuevaConsultaPage() {
                   style={{ backgroundColor: "var(--forest-200)", color: "var(--forest-800)" }}
                   aria-hidden="true"
                 >
-                  {pacienteNombre.charAt(0).toUpperCase()}
+                  {pacienteNombre?.[0]?.toUpperCase() ?? '?'}
                 </div>
                 <div>
                   <p className="text-sm font-semibold" style={{ color: "var(--ink)" }}>{pacienteNombre}</p>
