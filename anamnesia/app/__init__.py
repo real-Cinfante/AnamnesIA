@@ -122,6 +122,13 @@ def create_app() -> Flask:
     # ── Health check (público) ─────────────────────────────────────────────────
     @app.get("/api/health")
     def health():
-        return jsonify({"ok": True, "service": "anamnesia-backend"})
+        groq_key = os.getenv("GROQ_API_KEY", "")
+        return jsonify({
+            "ok": True,
+            "service": "anamnesia-backend",
+            "groq_key_set": bool(groq_key),
+            "groq_key_length": len(groq_key),
+            "groq_key_prefix": groq_key[:8] if groq_key else "",
+        })
 
     return app
