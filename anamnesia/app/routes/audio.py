@@ -57,9 +57,11 @@ def _pipeline(app, audio_path: str, consulta_id: str, tipo: str, audio_url: str)
                 consulta_store.actualizar_duracion(consulta_id, duracion)
 
         except Exception as exc:
+            import traceback
             from app.services import transcripcion_service as ts
             ts.registrar_error(consulta_id, str(exc))
-            print(f"[Pipeline] ✗ Error: {exc}\n")
+            print(f"[Pipeline] ✗ Error tipo={type(exc).__name__}: {exc}")
+            print(f"[Pipeline] Traceback:\n{traceback.format_exc()}")
 
 
 @bp.post("/upload")
