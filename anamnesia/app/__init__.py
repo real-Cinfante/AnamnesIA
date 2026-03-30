@@ -137,6 +137,7 @@ def create_app() -> Flask:
             "env_file_exists": env_file_exists,
             "groq_vars": groq_vars,
             "total_env_vars": len(os.environ),
+            "env_var_names": sorted(os.environ.keys()),
         })
 
     return app
