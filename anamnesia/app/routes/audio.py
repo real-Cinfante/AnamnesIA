@@ -6,7 +6,7 @@ from app.config import config
 
 bp = Blueprint("audio", __name__)
 
-UPLOADS_DIR = os.path.join(os.path.dirname(__file__), "../../../uploads")
+UPLOADS_DIR = config.AUDIO_STORAGE_PATH
 
 _MIME_TO_EXT: dict[str, str] = {
     "audio/webm": ".webm",
