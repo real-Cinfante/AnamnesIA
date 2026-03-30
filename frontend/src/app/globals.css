@@ -1,0 +1,175 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design Tokens — Verdad Clínica ─────────────────────────────────────────── */
+@layer base {
+  :root {
+    /* Background — warm cream */
+    --background: 40 20% 97%;         /* #F8F6F2 */
+    --foreground: 150 14% 7%;         /* #111714 */
+
+    /* Card — parchment */
+    --card: 36 22% 95%;               /* #F0EDE7 */
+    --card-foreground: 150 14% 7%;
+
+    /* Primary — Forest 800 */
+    --primary: 153 37% 18%;           /* #1C3D2F */
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary */
+    --secondary: 150 20% 95%;         /* #F0FAF5 */
+    --secondary-foreground: 153 37% 18%;
+
+    /* Muted */
+    --muted: 36 18% 92%;
+    --muted-foreground: 25 8% 52%;    /* #847870 */
+
+    /* Accent — Forest 400 */
+    --accent: 152 38% 48%;            /* #4EA87D */
+    --accent-foreground: 0 0% 100%;
+
+    /* Border — warm */
+    --border: 32 20% 87%;             /* #E4DDD3 */
+    --input:  32 20% 87%;
+    --ring:   152 38% 48%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Sidebar — dark forest */
+    --sidebar-bg:     161 52% 5%;     /* #071511 */
+    --sidebar-text:   150 15% 72%;
+    --sidebar-muted:  150 12% 42%;
+    --sidebar-active: 152 38% 48%;    /* Forest 400 */
+    --sidebar-border: 161 40% 10%;
+
+    /* Radius */
+    --radius-sm: 8px;
+    --radius:    12px;
+    --radius-lg: 16px;
+
+    /* Brand colors as CSS vars for direct use */
+    --forest-950: #071511;
+    --forest-800: #1C3D2F;
+    --forest-600: #2E6B4F;
+    --forest-400: #4EA87D;
+    --forest-200: #95D6B8;
+    --forest-50:  #F0FAF5;
+    --cream:      #F8F6F2;
+    --parchment:  #F0EDE7;
+    --border-warm: #E4DDD3;
+    --ink:        #111714;
+    --stone:      #847870;
+  }
+}
+
+/* ── Base Styles ─────────────────────────────────────────────────────────────── */
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    background-color: var(--cream);
+  }
+
+  body {
+    background-color: var(--cream);
+    color: var(--ink);
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-warm);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--stone); }
+
+  /* Focus ring */
+  :focus-visible {
+    outline: 2px solid var(--forest-400);
+    outline-offset: 2px;
+  }
+}
+
+/* ── Component Utilities ─────────────────────────────────────────────────────── */
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+
+  /* Status dot */
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  /* Gradient text — forest green */
+  .gradient-text {
+    background: linear-gradient(135deg, var(--forest-800), var(--forest-400));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Skeleton shimmer — warm palette */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--parchment) 25%,
+      #e8e3dc 50%,
+      var(--parchment) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s linear infinite;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Grain texture overlay */
+  .grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    border-radius: inherit;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border-warm);
+  }
+}
+
+/* ── Audio element ─────────────────────────────────────────────────────────────── */
+audio::-webkit-media-controls-panel {
+  background-color: var(--parchment);
+}
+audio {
+  accent-color: var(--forest-400);
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
