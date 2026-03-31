@@ -64,12 +64,15 @@ def _llamar_llm(segmentos: list[dict]) -> dict:
 
 {guion}
 
-Devuelve un JSON con exactamente estas claves:
-- "anamnesis": motivo de consulta y síntomas relatados por el paciente
-- "antecedentes": antecedentes médicos, quirúrgicos, familiares o farmacológicos mencionados
-- "examen_fisico": hallazgos del examen físico realizado por el médico
-- "diagnostico_presuntivo": hipótesis diagnóstica o diagnóstico diferencial
-- "indicaciones": tratamiento indicado, medicamentos, dosis y derivaciones
+Devuelve un JSON con exactamente estas claves. CADA VALOR DEBE SER UN STRING DE TEXTO PLANO (nunca objetos ni arrays):
+- "anamnesis": string con motivo de consulta y síntomas relatados por el paciente
+- "antecedentes": string con antecedentes médicos, quirúrgicos, familiares o farmacológicos mencionados
+- "examen_fisico": string con hallazgos del examen físico realizado por el médico
+- "diagnostico_presuntivo": string con hipótesis diagnóstica o diagnóstico diferencial
+- "indicaciones": string con tratamiento indicado, medicamentos, dosis y derivaciones
+
+Ejemplo de formato correcto: {"anamnesis": "Paciente refiere cefalea de 3 días...", ...}
+Ejemplo INCORRECTO (NO hagas esto): {"anamnesis": {"motivo": "cefalea", "duracion": "3 días"}}
 """
 
     client = _get_groq()
@@ -109,6 +112,26 @@ def generar_historia_background(app, consulta_id: str) -> None:
                 entry["error"] = str(exc)
 
 
+def _flatten_value(val) -> str:
+    """Convierte cualquier valor a string plano para campos de historia."""
+    if val is None:
+        return "Sin información registrada."
+    if isinstance(val, str):
+        return val
+    if isinstance(val, dict):
+        # LLM a veces devuelve sub-objetos — unir valores como texto
+        parts = []
+        for k, v in val.items():
+            label = k.replace("_", " ").capitalize()
+            if isinstance(v, list):
+                v = ", ".join(str(i) for i in v)
+            parts.append(f"{label}: {v}")
+        return "\n".join(parts)
+    if isinstance(val, list):
+        return "\n".join(f"• {str(i)}" for i in val)
+    return str(val)
+
+
 def _guardar_nueva(consulta_id: str, campos: dict) -> dict:
     historia_id = str(uuid.uuid4())
     historia = {
@@ -118,7 +141,7 @@ def _guardar_nueva(consulta_id: str, campos: dict) -> dict:
         "editada_por_medico": False,
         "validated_at": None,
         "error": None,
-        **{k: campos.get(k, "Sin información registrada.") for k in CAMPOS_HISTORIA},
+        **{k: _flatten_value(campos.get(k)) for k in CAMPOS_HISTORIA},
     }
 
     with _lock:
