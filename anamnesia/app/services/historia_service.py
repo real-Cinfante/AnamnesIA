@@ -71,8 +71,8 @@ Devuelve un JSON con exactamente estas claves. CADA VALOR DEBE SER UN STRING DE 
 - "diagnostico_presuntivo": string con hipótesis diagnóstica o diagnóstico diferencial
 - "indicaciones": string con tratamiento indicado, medicamentos, dosis y derivaciones
 
-Ejemplo de formato correcto: {"anamnesis": "Paciente refiere cefalea de 3 días...", ...}
-Ejemplo INCORRECTO (NO hagas esto): {"anamnesis": {"motivo": "cefalea", "duracion": "3 días"}}
+Ejemplo de formato correcto: {{"anamnesis": "Paciente refiere cefalea de 3 días...", ...}}
+Ejemplo INCORRECTO (NO hagas esto): {{"anamnesis": {{"motivo": "cefalea", "duracion": "3 días"}}}}
 """
 
     client = _get_groq()
